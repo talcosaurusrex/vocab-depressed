@@ -126,10 +126,10 @@ Would you like to:
             choice = input(">")
             #learn
             if choice == "1":
-                testVocab(vocab)
+                learnVocab(vocab)
             #test
             elif choice == "2":
-                learnVocab(vocab)
+                testVocab(vocab)
             #go back
             elif choice == "0":
                 break
