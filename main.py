@@ -140,22 +140,25 @@ Would you like to:
         else:
             for i in vocab:
                 print(i)        
-            option = input("Edit or add? (0,1)")
+            option = input("Edit or add? (0,1,x)")
             if option == "0":
-                choice = input("Which vocab do you want to edit?")
-                for index, i in enumerate(vocab):
-                    for index2, i2 in enumerate(i):
-                        if choice == i2:
-                            edit = input("What would you like to change this to?")
-                            vocab[index][index2] = edit
-                            print(i2, "changed to", edit)
-                            choice = input("Are you sure? (y/n)")
-                            if choice.lower() == "y":
-                                choice = input("What's the name of this vocab set?")
-                                out_file = open(choice + ".dat","wb")
-                                pickle.dump(vocab, out_file)
-                                out_file.close()
-                                print("Vocab Added!\n")
+                while True:
+                    choice = input("Which vocab do you want to edit? (x to stop)")
+                    if choice.lower() == "x":
+                        break
+                    for index, i in enumerate(vocab):
+                        for index2, i2 in enumerate(i):
+                            if choice == i2:
+                                edit = input("What would you like to change this to?")
+                                vocab[index][index2] = edit
+                                print(i2, "changed to", edit)
+                                choice = input("Are you sure? (y/n)")
+                                if choice.lower() == "y":
+                                    choice = input("What's the name of this vocab set?")
+                                    out_file = open(choice + ".dat","wb")
+                                    pickle.dump(vocab, out_file)
+                                    out_file.close()
+                                    print("Vocab Changed!\n")
             elif option == "1":
                 vocabList = [i for i in vocab]
                 save(vocabList)
