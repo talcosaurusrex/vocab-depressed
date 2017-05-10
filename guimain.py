@@ -1,5 +1,5 @@
 #german vocab learner
-#ver 0.1
+#ver 0.269
 #TODO
 #randomise learn vocab
 import tkinter
@@ -7,64 +7,79 @@ import pickle
 import random
 
 
-def saveVocab(vocabList):
-    while True:
-        german = input("\nEnter German Word  >")
-        english = input("Enter English Word >")
-        if (input("Are you sure? (enter/n)")).lower() == "n":
-            continue
-        vocabList += [[german, english]]
-        if (input("Do you want to add more? (enter/n)")).lower() == "n":
-            break
-    name = input("What's the name of this module? >")     
+def saveVocab(event=None):
+    vocabList = newVocabList
+    name = save1.get()     
     out_file = open(name + ".dat","wb")
     pickle.dump(vocabList, out_file)
     out_file.close()
     print("Vocab Added!\n")
-def loadVocab():    
+    raise_frame(fChoice)
+    #clear entry
+    save1.delete(0, "end")
+def loadVocab(event=None):    
     try:
         in_file = open(module_entry.get() + ".dat","rb")
         vocab = pickle.load(in_file)
         in_file.close()
     except FileNotFoundError:                
         invalid_lbl.configure(text="Incorrect Input")
-        pass
     else:
+        global vocab
         raise_frame(fChoiceLT)
-    global vocab
+        #clear entry
+        module_entry.delete(0, "end")
+        invalid_lbl.configure(text="")
+def loadVocab2(event=None):    
+    try:
+        in_file = open(printI1.get() + ".dat","rb")
+        vocab = pickle.load(in_file)
+        in_file.close()
+    except FileNotFoundError:                
+        printI2.configure(text="Incorrect Input")
+    else:
+        global vocab
+        printVocab()
+        #clear entry
+        printI1.delete(0, "end")
+        printI2.configure(text="")
     
 def testedVocab():
-        raise_frame(fTested)            
-        tested1.configure(text="You got "+str(data[3])+" correct")
-        #print("Theses are the words you got wrong:")
-        #for i in incorrect:
-        #    print(i[0], "-", i[1])
-        #print()
+    fTested =tkinter.Frame(window)
+    fTested.grid(row=0, column=0, sticky='news')
+    tested1 = tkinter.Label(fTested, text="")
+    tested1.pack()
+    raise_frame(fTested)            
+    tested1.configure(text="You got "+str(data[3])+" correct")
+    tkinter.Label(fTested, text="Theses are the words you got wrong:").pack(pady=pad_y)
+    for i in data[2]:
+        tkinter.Label(fTested, text=i[0]+" - "+i[1]).pack()
+    tkinter.Button(fTested, text="Done", command=lambda:stopTested(fTested)).pack(pady=pad_y)
+def stopTested(fTested):
+    fTested.destroy()
+    raise_frame(fChoiceLT)
 def initTestVocab():
     raise_frame(fTest)
     position = 0
     #temp vocab, done, incorrect,score, current thing
-    done = []
-    incorrect = []
-    score = 0
     data = [[i for i in vocab], [], [], 0, []]
     global data
     testVocab(position)
 def testVocab(position):
     if position < len(vocab):
-        print("yay1")
         i = random.choice(data[0])
         data[4] = i
         test1.configure(text="What's " + i[0] + " in English?")        
         data[1].append(i)
         data[0].remove(i)
     elif position >= len(vocab):
-        print("yay2")
         i = random.choice(data[1])
+        test1.configure(text="What's " + i[0] + " in German?")
         data[4] = i       
     positionG = position
     global positionG
-def checkTestVocab(position):
+def checkTestVocab(event=None):
+    position = positionG
     i = data[4]
     if position < len(vocab):
         if test2.get() == i[1]:
@@ -87,6 +102,9 @@ def checkTestVocab(position):
         data[1].remove(i)
         test2.delete(0, "end")
         if position+1 == 2*len(vocab):
+            #clear entry
+            test2.delete(0, "end")
+            test3.configure(text="")
             testedVocab()
         else:
             testVocab(position+1)
@@ -107,30 +125,77 @@ def learnVocab(position):
         learn2.configure(text="What's " + i[1] + " in German?")
     positionG = position
     global positionG
-def checkLearnVocab(position):
+def checkLearnVocab(event=None):
+    position = positionG
     if position < len(vocab):
         i = vocab[position]
         if learn3.get() == i[1]:
             learn3.delete(0, "end")
+            learn4.configure(text="")
             learnVocab(position+1)
         else:
             learn4.configure(text="Incorrect, try again")
-            learnVocab(position+1)
+            learnVocab(position)
     elif 2*len(vocab) > position >= len(vocab):
         i = vocab[len(vocab) - position]
         if learn3.get() == i[0]:
             learn3.delete(0, "end")
+            learn4.configure(text="")
             learnVocab(position+1)
         else:
             learn4.configure(text="Incorrect, try again")
-            learnVocab(position+1)    
+            learnVocab(position)    
     else:
+        #clear entry
+        learn3.delete(0, "end")
+        learn4.configure(text="")
         raise_frame(fLearnt)
+def initNewVocab():
+    raise_frame(fNew)
+    newVocabList = []
+    global newVocabList
+def newVocab(event=None):
+    german = new2.get()
+    english = new4.get()
+    newVocabList.append([german, english])
+    #clear entry
+    new2.delete(0, "end")
+    new4.delete(0, "end")
+    print([german, english])
+def addVocab(event=None):
+    german = add1.get()
+    english = add2.get()    
+    try:
+        in_file = open(add3.get() + ".dat","rb")
+        newVocabList = pickle.load(in_file)
+        in_file.close()
+    except FileNotFoundError:                
+        add4.configure(text="File Not There")
+    else:
+        #clear entry
+        add3.delete(0, "end")
+        add4.configure(text="")
+        combined = [german, english]
+        newVocabList.append(combined)
+        global newVocabList
+        raise_frame(fSave)  
+def printVocab():
+    fPrint =tkinter.Frame(window)
+    fPrint.grid(row=0, column=0, sticky='news')
+    raise_frame(fPrint)    
+    for i in vocab:
+        tkinter.Label(fPrint, text=i[0]+" | "+i[1]).pack()
+    tkinter.Button(fPrint, text="Back", command=lambda:stopPrintVocab(fPrint)).pack(pady=pad_y)
+def stopPrintVocab(fPrint):
+    fPrint.destroy()
+    raise_frame(fChoice)
         
-
 
 def raise_frame(frame):
     frame.tkraise()
+
+pad_x=10
+pad_y=20
 
 window = tkinter.Tk()
 fHome =tkinter.Frame(window)
@@ -139,42 +204,47 @@ fChoiceLT =tkinter.Frame(window)
 fLearn =tkinter.Frame(window)
 fLearnt =tkinter.Frame(window)
 fTest =tkinter.Frame(window)
-fTested =tkinter.Frame(window)
 fChoice =tkinter.Frame(window)
 fNew =tkinter.Frame(window)
 fEdit =tkinter.Frame(window)
 fAdd =tkinter.Frame(window)
+fPrintI =tkinter.Frame(window)
+fSave =tkinter.Frame(window)
+fSize =tkinter.Frame(window)
 
-for frame in (fHome, fLoad, fChoiceLT, fLearn, fLearnt, fTest, fTested, fChoice, fNew, fEdit, fAdd):
+
+for frame in (fHome, fLoad, fChoiceLT, fLearn, fLearnt, fTest, fChoice, fNew, fEdit, fAdd, fPrintI, fSave, fSize):
     frame.grid(row=0, column=0, sticky='news')
     
-#window.geometry("500x500")
 window.wm_iconbitmap("favicon.ico")
 window.title("Vocab Depressed")
 #home
 tkinter.Label(fHome, text ="""Welcome to Vocab Learner!
 Would you like to:""").pack()
-tkinter.Button(fHome, text="Load Vocab", command=lambda:raise_frame(fLoad)).pack(pady=10)
-tkinter.Button(fHome, text="Add/Edit Vocab", command=lambda:raise_frame(fChoice)).pack(pady=10)
+tkinter.Button(fHome, text="Load Vocab", command=lambda:raise_frame(fLoad)).pack(pady=pad_y)
+tkinter.Button(fHome, text="Add/Edit Vocab", command=lambda:raise_frame(fChoice)).pack(pady=pad_y)
+tkinter.Button(fHome, text="Quit", command=exit).pack(pady=pad_y)
 #load
 tkinter.Label(fLoad, text="What vocab do you want to load?").pack()
 module_entry = tkinter.Entry(fLoad)
-module_entry.pack(pady=10)
-tkinter.Button(fLoad, text="Load", command=loadVocab).pack(pady=10)
+module_entry.pack(pady=pad_y)
+module_entry.bind('<Return>', loadVocab)
+tkinter.Button(fLoad, text="Load", command=loadVocab).pack(pady=pad_y)
 invalid_lbl = tkinter.Label(fLoad, text="")
-invalid_lbl.pack(pady=10)
-tkinter.Button(fLoad, text="Back", command=lambda:raise_frame(fHome)).pack(pady=10)
+invalid_lbl.pack(pady=pad_y)
+tkinter.Button(fLoad, text="Back", command=lambda:raise_frame(fHome)).pack(pady=pad_y)
 #choice l/t
 tkinter.Label(fChoiceLT, text="Do you want to:").pack()
-tkinter.Button(fChoiceLT, text="Learn Vocab", command=initLearnVocab).pack(pady=10)
-tkinter.Button(fChoiceLT, text="Test Vocab", command=initTestVocab).pack(pady=10)
-tkinter.Button(fChoiceLT, text="Back", command=lambda:raise_frame(fHome)).pack(pady=10)
+tkinter.Button(fChoiceLT, text="Learn Vocab", command=initLearnVocab).pack(pady=pad_y)
+tkinter.Button(fChoiceLT, text="Test Vocab", command=initTestVocab).pack(pady=pad_y)
+tkinter.Button(fChoiceLT, text="Back", command=lambda:raise_frame(fHome)).pack(pady=pad_y)
 #learn
 learn1 = tkinter.Label(fLearn, text="")
 learn2 = tkinter.Label(fLearn, text="")
 learn3 = tkinter.Entry(fLearn)
+learn3.bind('<Return>', checkLearnVocab)
 learn4 = tkinter.Label(fLearn, text="")
-learn5 = tkinter.Button(fLearn, text="Check", command=lambda:checkLearnVocab(positionG))
+learn5 = tkinter.Button(fLearn, text="Check", command=checkLearnVocab)
 learn6 = tkinter.Label(fLearn, text="""For referance:
 Ä	ALT+0196
 ä	ALT+0228
@@ -183,21 +253,22 @@ learn6 = tkinter.Label(fLearn, text="""For referance:
 Ü	ALT+0220
 ü	ALT+0252""")
 learn1.pack()
-learn2.pack(pady=10)
-learn3.pack(pady=10)
-learn4.pack(pady=10)
-learn5.pack(pady=10)
-learn6.pack(pady=10)
+learn2.pack(pady=pad_y)
+learn3.pack(pady=pad_y)
+learn4.pack(pady=pad_y)
+learn5.pack(pady=pad_y)
+learn6.pack(pady=pad_y)
 #learnt
 tkinter.Label(fLearnt, text="""Congratulations!!
 You have learnt your vocab!""").pack()
-tkinter.Button(fLearnt, text="Done", command=lambda:raise_frame(fChoiceLT)).pack(pady=10)
+tkinter.Button(fLearnt, text="Done", command=lambda:raise_frame(fChoiceLT)).pack(pady=pad_y)
 #test
 test1 = tkinter.Label(fTest, text="")
 test2 = tkinter.Entry(fTest)
+test2.bind('<Return>', checkTestVocab)
 test3 = tkinter.Label(fTest, text="")
-test4 = tkinter.Button(fTest, text="Check", command=lambda:checkTestVocab(positionG))
-test5 = tkinter.Label(fTest, text="""For referance:
+test4 = tkinter.Button(fTest, text="Check", command=checkTestVocab)
+test5 = tkinter.Label(fTest, text="""For referance -
 Ä	ALT+0196
 ä	ALT+0228
 Ö	ALT+0214
@@ -205,24 +276,69 @@ test5 = tkinter.Label(fTest, text="""For referance:
 Ü	ALT+0220
 ü	ALT+0252""")
 test1.pack()
-test2.pack(pady=10)
-test3.pack(pady=10)
-test4.pack(pady=10)
-test5.pack(pady=10)
-#tested
-tested1 = tkinter.Label(fTested, text="")
-tested1.pack()
-tkinter.Button(fTested, text="Done", command=lambda:raise_frame(fChoiceLT)).pack(pady=10)
+test2.pack(pady=pad_y)
+test3.pack(pady=pad_y)
+test4.pack(pady=pad_y)
+test5.pack(pady=pad_y)
+#tested, function
 #choice
 tkinter.Label(fChoice, text="Do you want to:").pack()
-tkinter.Button(fChoice, text="Create New Vocab List", command=lambda:raise_frame(fNew)).pack(pady=10)
-tkinter.Button(fChoice, text="Edit Existing Vocab List", command=lambda:raise_frame(fEdit)).pack(pady=10)
-tkinter.Button(fChoice, text="Add Words to Existing Vocab List", command=lambda:raise_frame(fNew)).pack(pady=10, padx=10)
-tkinter.Button(fChoice, text="Back", command=lambda:raise_frame(fHome)).pack(pady=10)
+tkinter.Button(fChoice, text="Create New Vocab List", command=initNewVocab).pack(pady=pad_y)
+tkinter.Button(fChoice, text="Edit Existing Vocab List", command=lambda:raise_frame(fEdit)).pack(pady=pad_y)
+tkinter.Button(fChoice, text="Add Words to Existing Vocab List", command=lambda:raise_frame(fAdd)).pack(pady=pad_y)
+tkinter.Button(fChoice, text="Print a Vocab List", command=lambda:raise_frame(fPrintI)).pack(pady=pad_y)
+tkinter.Button(fChoice, text="Back", command=lambda:raise_frame(fHome)).pack(pady=pad_y)
 #new
+tkinter.Label(fNew, text="Create New Vocab").pack()
+tkinter.Label(fNew, text="Enter German:").pack(pady=pad_y)
+new2 = tkinter.Entry(fNew)#entry done
+new2.pack(pady=pad_y)
+tkinter.Label(fNew, text="Enter English:").pack(pady=pad_y)
+new4 = tkinter.Entry(fNew)
+new4.bind('<Return>', newVocab)
+new4.pack(pady=pad_y)
+tkinter.Button(fNew, text="Add", command=newVocab).pack(pady=pad_y)
+tkinter.Button(fNew, text="Done", command=lambda:raise_frame(fSave)).pack(pady=pad_y)
+tkinter.Button(fNew, text="Back", command=lambda:raise_frame(fChoice)).pack(pady=pad_y)
 #edit
+tkinter.Button(fEdit, text="Back", command=lambda:raise_frame(fChoice)).pack(pady=pad_y)
 #add
+tkinter.Label(fAdd, text="What vocab do you want to add?").pack()
+tkinter.Label(fAdd, text="Enter German:").pack(pady=pad_y)
+add1 = tkinter.Entry(fAdd)#entry done
+add1.pack(pady=pad_y)
+tkinter.Label(fAdd, text="Enter English:").pack(pady=pad_y)
+add2 = tkinter.Entry(fAdd)#entry done
+add2.pack(pady=pad_y)
+tkinter.Label(fAdd, text="From Vocab List:").pack(pady=pad_y)
+add3 = tkinter.Entry(fAdd)
+add3.bind('<Return>', addVocab)
+add3.pack(pady=pad_y)
+add4 = tkinter.Label(fAdd, text="")
+add4.pack(pady=pad_y)
+tkinter.Button(fAdd, text="Add", command=addVocab).pack(pady=pad_y)
+tkinter.Button(fAdd, text="Back", command=lambda:raise_frame(fChoice)).pack(pady=pad_y)
+#printI
+tkinter.Label(fPrintI, text="What vocab do you want to load?").pack()
+printI1 = tkinter.Entry(fPrintI)
+printI1.bind('<Return>', loadVocab2)
+printI1.pack(pady=pad_y)
+tkinter.Button(fPrintI, text="Load", command=loadVocab2).pack(pady=pad_y)
+printI2 = tkinter.Label(fPrintI, text="")
+printI2.pack(pady=pad_y)
+tkinter.Button(fPrintI, text="Back", command=lambda:raise_frame(fChoice)).pack(pady=pad_y)
+#print, done in a function
+#save
+tkinter.Label(fSave, text="Save to Module:").pack()
+save1 = tkinter.Entry(fSave)
+save1.bind('<Return>', saveVocab)
+save1.pack(pady=pad_y)
+tkinter.Button(fSave, text="Done", command=saveVocab).pack(pady=pad_y)
+#size, this sets the size of the window
+tkinter.Label(fSize, text="").pack(pady=200, padx=200)
 
+
+#.bind('<Return>', func)
 #run
 raise_frame(fHome)
 window.mainloop()
@@ -231,42 +347,18 @@ while True:
     print("""Welcome to Vocab Learner!
 No Vocab Loaded!
 Would you like to:
-1 - Load Vocab
 2 - Add/Edit Vocab
-0 - Quit
 """)
 
     choice = input("\n>")
 
-    #load vocab
-    if choice == "1":
-        vocab = loadVocab()
-        while True:
-            print("""Do you want to:
-1 - Learn Vocab
-2 - Test Vocab
-0 - Go Back
-""")
-            choice = input(">")
-            #learn
-            if choice == "1":
-                learnVocab(vocab)
-            #test
-            elif choice == "2":
-                testVocab(vocab)
-            #go back
-            elif choice == "0":
-                break
     #add/edit Vocab
-    elif choice == "2":
-        print("Do you want to create new vocab or edit existing vocab? (0,1)")
+    if choice == "2":
+        print("Do you want edit existing vocab? (1)")
         choice = input(">")
-        #new vocab
-        if choice == "0":
-            vocabList = []
-            saveVocab(vocabList)
+        
         #edit vocab
-        if choice == "2":
+        if choice == "1":
             vocab = loadVocab()
             try:
                 tempVocab = [i for i in vocab]
@@ -296,14 +388,3 @@ Would you like to:
                                         pickle.dump(vocab, out_file)
                                         out_file.close()
                                         print("Vocab Changed!\n")
-                #add vocab
-                elif option == "1":
-                    vocabList = [i for i in vocab]
-                    saveVocab(vocabList)
-    #quit
-    elif choice == "0":
-        print("Goodbye")
-        break
-    #invalid choice
-    else:
-        print("Invalid Choice")
