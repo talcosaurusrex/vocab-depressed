@@ -136,6 +136,7 @@ def checkLearnVocab(event=None):
         if learn3.get() == i[1]:
             learn3.delete(0, "end")
             learn4.configure(text="")
+            learn4.configure(text="Well Done")
             learnVocab(position+1)
         else:
             learn4.configure(text="Incorrect, try again")
@@ -145,6 +146,7 @@ def checkLearnVocab(event=None):
         if learn3.get() == i[0]:
             learn3.delete(0, "end")
             learn4.configure(text="")
+            learn4.configure(text="Well Done")
             learnVocab(position+1)
         else:
             learn4.configure(text="Incorrect, try again")
@@ -262,8 +264,8 @@ fSize =tkinter.Frame(window)
 for frame in (fHome, fLoad, fChoiceLT, fLearn, fLearnt, fTest, fChoice, fNew, fEdit, fChange, fAdd, fPrintI, fSave, fSize):
     frame.grid(row=0, column=0, sticky='news')
     
-window.wm_iconbitmap("icon.ico")
-window.title("Vocab Depressed")
+window.wm_iconbitmap("favicon.ico")
+window.title("Vocab")# Depressed")
 #home
 tkinter.Label(fHome, text ="""Welcome to Vocab Learner!
 Would you like to:""").pack()
@@ -409,36 +411,3 @@ tkinter.Label(fSize, text="").pack(pady=200, padx=200)
 #run
 raise_frame(fHome)
 window.mainloop()
-print()
-while True:
-    print("""Welcome to Vocab Learner!
-No Vocab Loaded!
-Would you like to:
-2 - Add/Edit Vocab
-""")
-
-    choice = input("\n>")
-
-    #add/edit Vocab
-    if choice == "2":
-        print("Do you want edit existing vocab? (1)")
-        choice = input(">")
-        
-        #edit vocab
-        if choice == "1":
-            vocab = loadVocab()
-            try:
-                tempVocab = [i for i in vocab]
-            except:
-                print("No Vocab Loaded!\n")
-            else:
-                for i in vocab:
-                    print(i)        
-                option = input("Edit or add? (0,1,x)")
-                #edit vocab
-                if option == "0":
-                    while True:
-                        choice = input("Which vocab do you want to edit? (x to stop)")
-                        if choice.lower() == "x":
-                            break
-                        
