@@ -293,7 +293,7 @@ learn3 = tkinter.Entry(fLearn)
 learn3.bind('<Return>', checkLearnVocab)
 learn4 = tkinter.Label(fLearn, text="")
 learn5 = tkinter.Button(fLearn, text="Check", command=checkLearnVocab)
-learn6 = tkinter.Label(fLearn, text="""For referance:
+learn6 = tkinter.Label(fLearn, text="""For reference:
 Ä	ALT+0196
 ä	ALT+0228
 Ö	ALT+0214
@@ -318,7 +318,7 @@ test2 = tkinter.Entry(fTest)
 test2.bind('<Return>', checkTestVocab)
 test3 = tkinter.Label(fTest, text="")
 test4 = tkinter.Button(fTest, text="Check", command=checkTestVocab)
-test5 = tkinter.Label(fTest, text="""For referance -
+test5 = tkinter.Label(fTest, text="""For reference -
 Ä	ALT+0196
 ä	ALT+0228
 Ö	ALT+0214
