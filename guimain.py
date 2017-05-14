@@ -2,7 +2,6 @@
 #ver 0.270
 #TODO
 #randomise learn vocab?
-#add edit list
 import tkinter
 import pickle
 import random
@@ -220,6 +219,7 @@ def addEditVocab(event=None):
                 change1.delete(0, "end")
                 change3.delete(0, "end")
                 edit1.delete(0, "end")
+                change2.configure(text="") 
                 fVocab.destroy()
                 raise_frame(fChoice)
             else:
@@ -227,7 +227,7 @@ def addEditVocab(event=None):
 def printVocab():
     fPrint =tkinter.Frame(window)
     fPrint.grid(row=0, column=0, sticky='news')
-    raise_frame(fPrint)    
+    raise_frame(fPrint)
     for i in vocab:
         tkinter.Label(fPrint, text=i[0]+" | "+i[1]).pack()
     tkinter.Button(fPrint, text="Back", command=lambda:stopPrintVocab(fPrint)).pack(pady=pad_y)
