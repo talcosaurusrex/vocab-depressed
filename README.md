@@ -3,4 +3,4 @@ Vocab Trainer
 
 This is a simplish program to learn your german vocab
 
-finished, if you have any more ideas add it to a text file and upload it
+Ignore all of the errors that the terminal spews out as it still works otherwise
