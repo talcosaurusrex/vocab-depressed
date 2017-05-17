@@ -264,10 +264,10 @@ fSize =tkinter.Frame(window)
 for frame in (fHome, fLoad, fChoiceLT, fLearn, fLearnt, fTest, fChoice, fNew, fEdit, fChange, fAdd, fPrintI, fSave, fSize):
     frame.grid(row=0, column=0, sticky='news')
     
-window.wm_iconbitmap("favicon.ico")
-window.title("Vocab")# Depressed")
+window.wm_iconbitmap("icon.ico")
+window.title("Vocab Depressed")
 #home
-tkinter.Label(fHome, text ="""Welcome to Vocab Learner!
+tkinter.Label(fHome, text ="""Welcome to Vocab Depressed!
 Would you like to:""").pack()
 tkinter.Button(fHome, text="Load Vocab", command=lambda:raise_frame(fLoad)).pack(pady=pad_y)
 tkinter.Button(fHome, text="Add/Edit Vocab", command=lambda:raise_frame(fChoice)).pack(pady=pad_y)
