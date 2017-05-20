@@ -4,6 +4,7 @@ import tkinter
 import pickle
 import random
 
+#data structure object
 class Data:
     def __init__():
         vocab = []
@@ -245,10 +246,13 @@ def stopPrintVocab(fPrint):
 def raise_frame(frame):
     frame.tkraise()
 
+#predefined dimensions
 pad_x=10
 pad_y=20
 
+#defining frames
 window = tkinter.Tk()
+window.resizable(0,0)
 fHome =tkinter.Frame(window)
 fLoad =tkinter.Frame(window)
 fChoiceLT =tkinter.Frame(window)
@@ -266,13 +270,16 @@ fSize =tkinter.Frame(window)
 #print
 #tested
 
-
+#organising frames
 for frame in (fHome, fLoad, fChoiceLT, fLearn, fLearnt, fTest, fChoice, fNew, fEdit, fChange, fAdd, fPrintI, fSave, fSize):
     frame.grid(row=0, column=0, sticky='news')
 
-data = Data   
+#main object containing data that is passed around
+data = Data
+#cool window stuff
 window.wm_iconbitmap("icon.ico")
 window.title("Vocab")
+#FRAMES-------------------------------------------
 #home
 tkinter.Label(fHome, text ="""Welcome to Vocab Learner!
 Would you like to:""").pack()
