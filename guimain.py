@@ -128,7 +128,7 @@ def learnVocab(data):
         learn2.configure(text="What's " + i[0] + " in English?")
         data.phrase = i[0] + " means " + i[1]
     elif data.position >= len(data.vocab):
-        i = data.vocab[len(data.vocab) - data.position]
+        i = data.vocab[data.position - len(data.vocab)]
         learn1.configure(text=i[1] + " means <Hiddden>")
         learn2.configure(text="What's " + i[1] + " in German?")
         data.phrase = i[1] + " means " + i[0]
@@ -147,7 +147,7 @@ def checkLearnVocab(data):#fixed
             learn4.configure(text="Incorrect, try again")
             learnVocab(data)
     elif 2*len(data.vocab)-1 > data.position >= len(data.vocab):
-        i = data.vocab[len(data.vocab) - data.position]
+        i = data.vocab[data.position - len(data.vocab)]
         if learn3.get() == i[0]:
             learn3.delete(0, "end")
             learn4.configure(text="")
