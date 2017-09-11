@@ -20,7 +20,7 @@ class Data:
 
 def saveVocab(data):#fixed
     name = save1.get()     
-    out_file = open(name + ".dat","wb")
+    out_file = open(name + ".dab","wb")
     pickle.dump(data.newVocabList, out_file)
     out_file.close()
     raise_frame(fChoice)
@@ -28,7 +28,7 @@ def saveVocab(data):#fixed
     save1.delete(0, "end")
 def loadVocab(data):#fixed
     try:
-        in_file = open(module_entry.get() + ".dat","rb")
+        in_file = open(module_entry.get() + ".dab","rb")
         data.vocab = pickle.load(in_file)
         in_file.close()
     except FileNotFoundError:                
@@ -40,7 +40,7 @@ def loadVocab(data):#fixed
         invalid_lbl.configure(text="")
 def loadVocab2(data):#fixed
     try:
-        in_file = open(printI1.get() + ".dat","rb")
+        in_file = open(printI1.get() + ".dab","rb")
         data.vocab = pickle.load(in_file)
         in_file.close()
     except FileNotFoundError:                
@@ -176,7 +176,7 @@ def addVocab(data):#fixed
     german = add1.get()
     english = add2.get()    
     try:
-        in_file = open(add3.get() + ".dat","rb")
+        in_file = open(add3.get() + ".dab","rb")
         data.newVocabList = pickle.load(in_file)
         in_file.close()
     except FileNotFoundError:                
@@ -191,7 +191,7 @@ def addVocab(data):#fixed
         raise_frame(fSave)
 def editVocab(data):#fixed
     try:
-        in_file = open(edit1.get() + ".dat","rb")
+        in_file = open(edit1.get() + ".dab","rb")
         data.newVocabList = pickle.load(in_file)
         in_file.close()
     except FileNotFoundError:                
@@ -217,7 +217,7 @@ def addEditVocab(data):
                 change2.configure(text="")
                 data.newVocabList[index][index2] = change3.get()
                 #save
-                out_file = open(edit1.get() + ".dat","wb")
+                out_file = open(edit1.get() + ".dab","wb")
                 pickle.dump(data.newVocabList, out_file)
                 out_file.close()
                 stopEditVocab(data)
