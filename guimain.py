@@ -313,7 +313,8 @@ learn6 = tkinter.Label(fLearn, text="""For reference:
 Ö	ALT+0214
 ö	ALT+0246
 Ü	ALT+0220
-ü	ALT+0252""")
+ü	ALT+0252
+ß   ALT+0223""")
 learn1.pack()
 tkinter.Button(fLearn, text="Show", command=lambda:showVocab(data)).pack()
 learn2.pack(pady=pad_y)
@@ -338,7 +339,8 @@ test5 = tkinter.Label(fTest, text="""For reference -
 Ö	ALT+0214
 ö	ALT+0246
 Ü	ALT+0220
-ü	ALT+0252""")
+ü	ALT+0252
+ß   ALT+0223""")
 test1.pack()
 test2.pack(pady=pad_y)
 test3.pack(pady=pad_y)
