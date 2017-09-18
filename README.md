@@ -3,4 +3,6 @@ Vocab Trainer
 
 This is a simplish program to learn your german vocab
 
-Updated to fix global variable issues!!!!
+Includes no global variables
+
+Includes the revoloutionary .dab file format
